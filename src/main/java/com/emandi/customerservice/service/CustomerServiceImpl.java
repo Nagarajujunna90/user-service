@@ -8,7 +8,6 @@ import com.emandi.customerservice.repository.CustomerRepository;
 import com.emandi.customerservice.repository.RoleRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,15 +25,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private EventServiceLog eventServiceLog;
-    @Autowired
-   private PasswordEncoder passwordEncoder;
+//    @Autowired
+//   private PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(User user) throws JsonProcessingException {
         Set<Role> roles1 = new HashSet<>();
         roles1.add(new Role("user"));
         user.setRoles(roles1);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //user.setPassword(passwordEncoder.encode(user.getPassword()));
         User user1 = userRepositroy.save(user);
      //   eventServiceLog.addEvent(user1, "ADD_USER");
         return user1;

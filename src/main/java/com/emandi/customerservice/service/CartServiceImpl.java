@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +29,9 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    @Qualifier("singleThreadPool")
-    private ExecutorService executorService;
+//    @Autowired
+//    @Qualifier("singleThreadPool")
+//    private ExecutorService executorService;
 
     public CartServiceImpl(CartRepository cartRepository, ClientConfig clientConfig) {
         this.cartRepository = cartRepository;
@@ -45,10 +44,10 @@ public class CartServiceImpl implements CartService {
         pathParams.put("productId", cart.getProductId());
         Mono<Product> product = clientConfig.getProductById("http://localhost:8084/product/v1/product/{productId}", pathParams, Product.class);
         product.subscribe(value -> System.out.println(value));
-        User user = customerRepository.findById(cart.getUser().get(0).getId()).orElse(null);
+        User user = customerRepository.findById(cart.getUser().getId()).orElse(null);
         List<User> userList=new ArrayList<>();
         userList.add(user);
-        cart.setUser(userList);
+       // cart.setUser(userList);
         //  if (product != null) {
         return cartRepository.save(cart);
         //  }
@@ -61,7 +60,7 @@ public class CartServiceImpl implements CartService {
     }
 
 
-    public <T> Future<T> execute(Callable<T> callable) {
-        return executorService.submit(callable);
-    }
+//    public <T> Future<T> execute(Callable<T> callable) {
+//        return executorService.submit(callable);
+//    }
 }

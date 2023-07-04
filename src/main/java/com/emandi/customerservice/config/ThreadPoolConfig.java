@@ -1,3 +1,4 @@
+/*
 package com.emandi.customerservice.config;
 
 import org.springframework.context.annotation.Bean;
@@ -26,3 +27,4 @@ public class ThreadPoolConfig {
 
 
 }
+*/
