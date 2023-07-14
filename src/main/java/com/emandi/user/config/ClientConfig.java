@@ -1,4 +1,4 @@
-package com.emandi.customerservice.config;
+package com.emandi.user.config;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;

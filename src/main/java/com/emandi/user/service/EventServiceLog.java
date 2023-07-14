@@ -1,6 +1,6 @@
-package com.emandi.customerservice.service;
+package com.emandi.user.service;
 
-import com.emandi.customerservice.model.EventStore;
+import com.emandi.user.model.EventStore;
 
 import java.time.LocalDateTime;
 

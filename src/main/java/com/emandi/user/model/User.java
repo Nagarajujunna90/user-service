@@ -1,19 +1,16 @@
-package com.emandi.customerservice.model;
+package com.emandi.user.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.emandi.user.dto.UserDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Entity
 public class User {
@@ -26,22 +23,31 @@ public class User {
     private String lastName;
     private String fatherName;
     private String motherName;
-    private String qualification;
+    private Integer mobileNumber;
+    private Integer gender;
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Cart> carts;
 
-    public User(String userName, String password, String firstName, String lastName, String fatherName, String motherName, String qualification) {
+    public User(String userName, String password, String firstName, String lastName, String fatherName, String motherName) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.fatherName = fatherName;
         this.motherName = motherName;
-        this.qualification = qualification;
+    }
+
+    public User(UserDTO userDTO) {
+        this.userName = userDTO.getUserName();
+        this.firstName = userDTO.getFirstName();
+        this.lastName = userDTO.getLastName();
+        this.mobileNumber=userDTO.getMobileNumber();
+        this.gender=userDTO.getGender();
     }
 }
 

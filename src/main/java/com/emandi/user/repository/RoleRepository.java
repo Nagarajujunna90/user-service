@@ -1,7 +1,7 @@
-package com.emandi.customerservice.repository;
+package com.emandi.user.repository;
 
 
-import com.emandi.customerservice.model.Role;
+import com.emandi.user.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 @Repository

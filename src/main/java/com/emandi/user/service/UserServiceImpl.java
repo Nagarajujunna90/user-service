@@ -1,12 +1,12 @@
-package com.emandi.customerservice.service;
+package com.emandi.user.service;
 
 
-import com.emandi.customerservice.dto.UserDTO;
-import com.emandi.customerservice.model.Role;
-import com.emandi.customerservice.model.User;
-import com.emandi.customerservice.repository.CustomerRepository;
-import com.emandi.customerservice.repository.RoleRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.emandi.user.dto.LoginDTO;
+import com.emandi.user.dto.UserDTO;
+import com.emandi.user.model.Role;
+import com.emandi.user.model.User;
+import com.emandi.user.repository.CustomerRepository;
+import com.emandi.user.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,31 +17,31 @@ import java.util.Set;
 
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class UserServiceImpl implements UserService {
     @Autowired
-    private CustomerRepository userRepositroy;
+    private CustomerRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-
     @Autowired
     private EventServiceLog eventServiceLog;
-//    @Autowired
+   // @Autowired
 //   private PasswordEncoder passwordEncoder;
 
     @Override
-    public User createUser(User user) throws JsonProcessingException {
+    public User registerUser(UserDTO userDTO) {
+        User user=new User(userDTO);
         Set<Role> roles1 = new HashSet<>();
         roles1.add(new Role("user"));
         user.setRoles(roles1);
         //user.setPassword(passwordEncoder.encode(user.getPassword()));
-        User user1 = userRepositroy.save(user);
-     //   eventServiceLog.addEvent(user1, "ADD_USER");
+        User user1 = userRepository.save(user);
+        //   eventServiceLog.addEvent(user1, "ADD_USER");
         return user1;
     }
 
     @Override
     public void deleteUser(Integer id) {
-        userRepositroy.deleteById(id);
+        userRepository.deleteById(id);
         eventServiceLog.addEvent(id, "DELETE_USER");
 
     }
@@ -49,7 +49,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public User updateUser(Integer id, User user) {
         user.setId(id);
-        User updatedUser = userRepositroy.save(user);
+        User updatedUser = userRepository.save(user);
         eventServiceLog.addEvent(updatedUser, "UPDATE_USER");
         return updatedUser;
     }
@@ -57,8 +57,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public UserDTO findByUserId(Integer id) {
-        User user = userRepositroy.findById(id).orElse(null);
-        UserDTO userDTO=new UserDTO();
+        User user = userRepository.findById(id).orElse(null);
+        UserDTO userDTO = new UserDTO();
         userDTO.setFirstName(user.getFirstName());
         eventServiceLog.addEvent(user, "GET_USER_BY_ID");
         return userDTO;
@@ -66,9 +66,21 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<User> findAllUserDetails() {
-        List<User> userlist = (List<User>) userRepositroy.findAll();
+        List<User> userlist = (List<User>) userRepository.findAll();
         eventServiceLog.addEvent(userlist, "GET_ALL_USER_BY_ID");
         return userlist;
+    }
+
+    @Override
+    public String login(LoginDTO loginDTO) {
+        User user = userRepository.findByUserNameAndPassword(loginDTO.getUserName(), loginDTO.getPassword());
+        if(user!=null){
+            eventServiceLog.addEvent(loginDTO,"USER_LOGGED_IN");
+            return "User LoggedIn successfully";
+        }else{
+            return "User details not found";
+        }
+
     }
 
 

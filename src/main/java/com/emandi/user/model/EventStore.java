@@ -1,4 +1,4 @@
-package com.emandi.customerservice.model;
+package com.emandi.user.model;
 
 import lombok.Data;
 

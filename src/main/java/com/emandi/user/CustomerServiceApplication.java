@@ -1,4 +1,4 @@
-package com.emandi.customerservice;
+package com.emandi.user;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

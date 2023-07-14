@@ -1,10 +1,10 @@
-package com.emandi.customerservice.service;
+package com.emandi.user.service;
 
 
 import java.time.LocalDateTime;
 
-import com.emandi.customerservice.model.EventStore;
-import com.emandi.customerservice.repository.EventRepository;
+import com.emandi.user.model.EventStore;
+import com.emandi.user.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

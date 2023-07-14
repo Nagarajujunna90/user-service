@@ -1,15 +1,14 @@
-package com.emandi.customerservice.controller;
+package com.emandi.user.controller;
 
 
-import com.emandi.customerservice.model.Cart;
-import com.emandi.customerservice.service.CartService;
+import com.emandi.user.model.Cart;
+import com.emandi.user.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+@CrossOrigin("http://localhost:4200")
 @RestController
 @RequestMapping("/customer/v1")
 public class CartController {
@@ -21,8 +20,12 @@ public class CartController {
     }
 
     @GetMapping("/carts/{userId}")
-    public  ResponseEntity<List<Cart>> findAllCartsById(@PathVariable("userId") Integer userId) {
+    public  ResponseEntity<?> findAllCartsById(@PathVariable("userId") Integer userId) {
         return new ResponseEntity<>(cartService.findAllCartsById(userId), HttpStatus.OK);
+    }
+    @DeleteMapping("/cart/{productId}")
+    public  ResponseEntity<?> deleteProductByProductId(@PathVariable("productId") String productId) {
+        return new ResponseEntity<>(cartService.deleteProductFromCart(productId), HttpStatus.OK);
     }
 
 }

@@ -1,8 +1,8 @@
-package com.emandi.customerservice.repository;
+package com.emandi.user.repository;
 
 import java.time.LocalDateTime;
 
-import com.emandi.customerservice.model.EventStore;
+import com.emandi.user.model.EventStore;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Component;
 

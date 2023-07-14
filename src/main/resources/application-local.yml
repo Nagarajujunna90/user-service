@@ -27,7 +27,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
 
-
+  codec:
+    max-in-memory-size: 10MB
   #  kafka:
 #    consumer:
 #      bootstrap-servers: localhost:9092
