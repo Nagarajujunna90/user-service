@@ -1,6 +1,7 @@
 package com.emandi.user.service;
 
 
+import com.emandi.user.config.KafkaProducerConfig;
 import com.emandi.user.dto.CartResponse;
 import com.emandi.user.dto.LoginRequest;
 import com.emandi.user.dto.UserRequest;
@@ -24,6 +25,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private KafkaProducerConfig kafkaProducerConfig;
+    @Autowired
     private RoleRepository roleRepository;
     @Autowired
     private EventServiceLog eventServiceLog;
@@ -38,7 +41,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles1);
         user.setPassword("nagaraju");
         User user1 = userRepository.save(user);
-
+        kafkaProducerConfig.kafkaTemplate().send("createUser",user1.toString());
         eventServiceLog.addEvent(user1, "ADD_USER");
         return user1;
     }

@@ -1,6 +1,5 @@
 server:
   port: 8082
-  #forward-headers-strategy: framework
 #eureka:
 #  client:
 #    register-with-eureka: true
@@ -29,27 +28,29 @@ spring:
 
   codec:
     max-in-memory-size: 10MB
-  #  kafka:
-#    consumer:
-#      bootstrap-servers: localhost:9092
-#      group-id: nagaraju1
-#      auto-offset-reset: earliest
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      enable-auto-commit: false
-#    ssl:
-#      trust-store-type: SSL
-#      key-store-key:
-#      key-store-password:
-#      key-store-location:
-#    security:
-#      protocol: SASL_SSL
-#    producer:
-#      bootstrap-servers: localhost:9092
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-#    topics:
-#      input: createUser
+#Kafka properties started here
+  kafka:
+    autoStartup: false
+    ssl:
+      trust-store-type: SSL
+      key-store-key:
+      key-store-password:
+      key-store-location:
+    security:
+      protocol: SASL_SSL
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: nagaraju
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+    topics:
+       input: createUser
 
   main:
     web-application-type: reactive

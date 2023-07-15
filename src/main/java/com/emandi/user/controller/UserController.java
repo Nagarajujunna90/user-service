@@ -19,6 +19,7 @@ public class UserController {
     @PostMapping("/user")
     public ResponseEntity<User> registerUser(@RequestBody UserRequest userRequest) {
         return new ResponseEntity<>(userService.registerUser(userRequest), HttpStatus.CREATED);
+
     }
 
     @DeleteMapping("/user/{id}")
