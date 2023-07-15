@@ -6,7 +6,7 @@ import com.emandi.user.model.Cart;
 import com.emandi.user.model.Product;
 import com.emandi.user.model.User;
 import com.emandi.user.repository.CartRepository;
-import com.emandi.user.repository.CustomerRepository;
+import com.emandi.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -24,7 +24,7 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private ClientConfig clientConfig;
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
 //    @Autowired
 //    @Qualifier("singleThreadPool")
@@ -42,7 +42,7 @@ public class CartServiceImpl implements CartService {
         Mono<Product> product = clientConfig.getProductById("http://localhost:8084/product/v1/product/{productId}", pathParams, Product.class);
         product.subscribe(value -> System.out.println(value));
         if (cart.getCustomerId() != null) {
-            User user = customerRepository.findById(cart.getCustomerId()).orElse(null);
+            User user = userRepository.findById(cart.getCustomerId()).orElse(null);
             cart.setUser(user);
         }
 

@@ -7,7 +7,7 @@ import com.emandi.user.dto.UserRequest;
 import com.emandi.user.dto.UserResponse;
 import com.emandi.user.model.Role;
 import com.emandi.user.model.User;
-import com.emandi.user.repository.CustomerRepository;
+import com.emandi.user.repository.UserRepository;
 import com.emandi.user.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,10 +19,10 @@ import java.util.List;
 import java.util.Set;
 
 
-@Service
+@Service@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
-    private CustomerRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
@@ -38,6 +38,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles1);
         user.setPassword("nagaraju");
         User user1 = userRepository.save(user);
+
         eventServiceLog.addEvent(user1, "ADD_USER");
         return user1;
     }

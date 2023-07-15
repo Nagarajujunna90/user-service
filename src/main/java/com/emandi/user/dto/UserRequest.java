@@ -12,11 +12,13 @@ public class UserRequest {
     @NotEmpty
     private String lastName;
     @NotEmpty
+    private String userName;
+    @NotEmpty
     private Integer mobileNumber;
     @NotNull
     private Integer password;
     private Integer gender;
-    private String userName;
+
     private String roleName;
     private AddressRequest addressRequest;
 //    private Role role;

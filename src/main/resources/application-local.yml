@@ -17,7 +17,7 @@ spring:
   application:
     name: user-service
   datasource:
-    url: jdbc:mysql://localhost:3306/e-user?useSSL=true
+    url: jdbc:mysql://localhost:3306/e-user?useSSL=false&allowPublicKeyRetrieval=true
     password: root
     username: root
   jpa:
