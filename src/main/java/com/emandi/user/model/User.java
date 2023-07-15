@@ -1,12 +1,15 @@
 package com.emandi.user.model;
 
-import com.emandi.user.dto.UserDTO;
+import com.emandi.user.dto.UserRequest;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -22,16 +25,17 @@ public class User {
     private String firstName;
     private String lastName;
     private String fatherName;
-    private String motherName;
     private Integer mobileNumber;
     private Integer gender;
+    @OneToOne
+    private Address address;
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinTable(name = "user_role",joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Cart> carts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER, orphanRemoval = true)
+    private List<Cart> carts = new ArrayList<>();
 
     public User(String userName, String password, String firstName, String lastName, String fatherName, String motherName) {
         this.userName = userName;
@@ -39,15 +43,14 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.fatherName = fatherName;
-        this.motherName = motherName;
     }
 
-    public User(UserDTO userDTO) {
-        this.userName = userDTO.getUserName();
-        this.firstName = userDTO.getFirstName();
-        this.lastName = userDTO.getLastName();
-        this.mobileNumber=userDTO.getMobileNumber();
-        this.gender=userDTO.getGender();
+    public User(UserRequest userRequest) {
+        this.userName = userRequest.getUserName();
+        this.firstName = userRequest.getFirstName();
+        this.lastName = userRequest.getLastName();
+        this.mobileNumber = userRequest.getMobileNumber();
+        this.gender = userRequest.getGender();
     }
 }
 

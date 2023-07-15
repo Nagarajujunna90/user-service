@@ -1,8 +1,10 @@
 package com.emandi.user.service;
 
 
-import com.emandi.user.dto.LoginDTO;
-import com.emandi.user.dto.UserDTO;
+import com.emandi.user.dto.CartResponse;
+import com.emandi.user.dto.LoginRequest;
+import com.emandi.user.dto.UserRequest;
+import com.emandi.user.dto.UserResponse;
 import com.emandi.user.model.Role;
 import com.emandi.user.model.User;
 import com.emandi.user.repository.CustomerRepository;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,26 +31,28 @@ public class UserServiceImpl implements UserService {
 //   private PasswordEncoder passwordEncoder;
 
     @Override
-    public User registerUser(UserDTO userDTO) {
-        User user=new User(userDTO);
+    public User registerUser(UserRequest userRequest) {
+        User user=new User(userRequest);
         Set<Role> roles1 = new HashSet<>();
         roles1.add(new Role("user"));
         user.setRoles(roles1);
-        //user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword("nagaraju");
         User user1 = userRepository.save(user);
-        //   eventServiceLog.addEvent(user1, "ADD_USER");
+        eventServiceLog.addEvent(user1, "ADD_USER");
         return user1;
     }
 
     @Override
-    public void deleteUser(Integer id) {
+    public String deleteUser(Integer id) {
         userRepository.deleteById(id);
         eventServiceLog.addEvent(id, "DELETE_USER");
+        return "User deleted successfully";
 
     }
 
     @Override
-    public User updateUser(Integer id, User user) {
+    public User updateUser(Integer id, UserRequest userRequest) {
+        User user=new User(userRequest);
         user.setId(id);
         User updatedUser = userRepository.save(user);
         eventServiceLog.addEvent(updatedUser, "UPDATE_USER");
@@ -56,26 +61,47 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDTO findByUserId(Integer id) {
+    public UserResponse findByUserId(Integer id) {
         User user = userRepository.findById(id).orElse(null);
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(user.getFirstName());
-        eventServiceLog.addEvent(user, "GET_USER_BY_ID");
-        return userDTO;
+        List<CartResponse> cartResponseList = new ArrayList<>();
+        UserResponse userResponse = null;
+        if (user != null) {
+            userResponse = new UserResponse(user);
+            user.getCarts().forEach(cart -> {
+                CartResponse cartResponse = new CartResponse(cart);
+                cartResponseList.add(cartResponse);
+            });
+         //   userResponse.setCartResponseList(cartResponseList);
+         //   eventServiceLog.addEvent(user, "GET_USER_BY_ID");
+        }
+
+        return userResponse;
     }
 
     @Override
-    public List<User> findAllUserDetails() {
+    public List<UserResponse> findAllUsers() {
         List<User> userlist = (List<User>) userRepository.findAll();
-        eventServiceLog.addEvent(userlist, "GET_ALL_USER_BY_ID");
-        return userlist;
+        List<UserResponse> userResponses = new ArrayList<>();
+        List<CartResponse> cartResponse = new ArrayList<>();
+        userlist.forEach(user -> {
+            UserResponse userResponse = new UserResponse(user);
+            user.getCarts().forEach(cart -> {
+                CartResponse cartResponse1 = new CartResponse(cart);
+                cartResponse.add(cartResponse1);
+            });
+       //     userResponse.setCartResponseList(cartResponse);
+         //   userResponse.setCartResponseList(cartResponse);
+            userResponses.add(userResponse);
+        });
+        // eventServiceLog.addEvent(userlist, "GET_ALL_USER_BY_ID");
+        return userResponses;
     }
 
     @Override
-    public String login(LoginDTO loginDTO) {
-        User user = userRepository.findByUserNameAndPassword(loginDTO.getUserName(), loginDTO.getPassword());
+    public String login(LoginRequest loginRequest) {
+        User user = userRepository.findByUserNameAndPassword(loginRequest.getUserName(), loginRequest.getPassword());
         if(user!=null){
-            eventServiceLog.addEvent(loginDTO,"USER_LOGGED_IN");
+            eventServiceLog.addEvent(loginRequest,"USER_LOGGED_IN");
             return "User LoggedIn successfully";
         }else{
             return "User details not found";

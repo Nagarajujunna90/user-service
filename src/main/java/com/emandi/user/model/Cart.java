@@ -1,6 +1,8 @@
 package com.emandi.user.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,6 +17,5 @@ public class Cart {
     private String productId;
     private Integer customerId;
     @ManyToOne
-    @JsonBackReference
     private User user;
 }

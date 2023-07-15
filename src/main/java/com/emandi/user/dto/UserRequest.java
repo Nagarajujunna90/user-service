@@ -1,27 +1,24 @@
 package com.emandi.user.dto;
 
-import com.emandi.user.model.Cart;
-import com.emandi.user.model.Role;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
-public class UserDTO {
-    @NotEmpty
-    private Integer mobileNumber;
-    @NotEmpty
-    private Integer gender;
-    @NotEmpty
-    private String userName;
-    @NotEmpty
-    private Integer password;
+public class UserRequest {
     @NotEmpty
     private String firstName;
     @NotEmpty
     private String lastName;
     @NotEmpty
+    private Integer mobileNumber;
+    @NotNull
+    private Integer password;
+    private Integer gender;
+    private String userName;
     private String roleName;
+    private AddressRequest addressRequest;
 //    private Role role;
 //    private Cart cart;
 

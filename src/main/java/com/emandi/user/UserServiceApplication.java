@@ -10,10 +10,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @OpenAPIDefinition(info = @Info(title = "user-service"))
 @SpringBootApplication
-public class CustomerServiceApplication {
+public class UserServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CustomerServiceApplication.class, args);
+        SpringApplication.run(UserServiceApplication.class, args);
     }
 
 /*    @Bean

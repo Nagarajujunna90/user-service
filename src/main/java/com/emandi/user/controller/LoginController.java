@@ -1,6 +1,6 @@
 package com.emandi.user.controller;
 
-import com.emandi.user.dto.LoginDTO;
+import com.emandi.user.dto.LoginRequest;
 import com.emandi.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class LoginController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-        return new ResponseEntity<>(userService.login(loginDTO), HttpStatus.CREATED);
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        return new ResponseEntity<>(userService.login(loginRequest), HttpStatus.CREATED);
     }
 }

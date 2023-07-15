@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class LoginDTO {
+public class LoginRequest {
     @NotEmpty
     private String userName;
     @NotEmpty
