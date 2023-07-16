@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         user.setRoles(roles1);
         user.setPassword("nagaraju");
         User user1 = userRepository.save(user);
-        kafkaProducerConfig.kafkaTemplate().send("createUser",user1.toString());
+       // kafkaProducerConfig.kafkaTemplate().send("createUser",user1.toString());
         eventServiceLog.addEvent(user1, "ADD_USER");
         return user1;
     }

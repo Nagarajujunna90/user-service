@@ -10,8 +10,7 @@ import org.springframework.kafka.annotation.EnableKafka;
 //import org.springframework.security.crypto.password.PasswordEncoder;
 //import org.springframework.web.reactive.function.client.WebClient;
 @OpenAPIDefinition(info = @Info(title = "user-service"))
-@SpringBootApplication
-@EnableKafka
+@SpringBootApplication(exclude = KafkaAutoConfiguration.class)
 public class UserServiceApplication {
 
     public static void main(String[] args) {
