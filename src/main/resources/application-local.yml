@@ -1,5 +1,6 @@
 server:
   port: 8082
+
 #eureka:
 #  client:
 #    register-with-eureka: true
@@ -51,7 +52,8 @@ spring:
       enable-auto-commit: false
     topics:
        input: createUser
-
+  config:
+    import: configserver:http://localhost:8888
   main:
     web-application-type: reactive
       #The above properties represent that only 2 requests are allowed in 5 seconds duration. Also,
@@ -96,3 +98,11 @@ resilience4j:
         cancel-running-future: false
         timeout-duration: 1s
       #timeLimiterAspectOrder : 2
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+  endpoint:
+    health:
+      show-details: always

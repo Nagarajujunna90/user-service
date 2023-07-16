@@ -17,43 +17,8 @@ server:
 #  api-docs:
 #    path: localhost
 spring:
-#  application:
-#    name: customer-service
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/e-user?useSSL=true
-#    password: root
-#    username: root
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
-#    database-platform: org.hibernate.dialect.MySQL8Dialect
-#    open-in-view: false
-
   profiles:
      active: local
-  #  kafka:
-#    consumer:
-#      bootstrap-servers: localhost:9092
-#      group-id: nagaraju1
-#      auto-offset-reset: earliest
-#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-#      enable-auto-commit: false
-#    ssl:
-#      trust-store-type: SSL
-#      key-store-key:
-#      key-store-password:
-#      key-store-location:
-#    security:
-#      protocol: SASL_SSL
-#    producer:
-#      bootstrap-servers: localhost:9092
-#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-#      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-#    topics:
-#      input: createUser
-
   main:
     web-application-type: reactive
 
