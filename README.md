@@ -1,6 +1,5 @@
 # user-service
 # Kafka commands to start kafka and bootstrap in windows
-=======================================================
 1.From kafka base localtion need to run below commands
     .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
     .\bin\windows\kafka-server-start.bat .\config\server.properties
@@ -18,7 +17,6 @@
 
 
 # Spring Cloud config implementation:
-=====================================
 1.Below dependencies need to add
     spring-boot-starter-actuator
     spring-boot-starter-config
