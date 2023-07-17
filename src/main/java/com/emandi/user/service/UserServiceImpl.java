@@ -38,12 +38,12 @@ public class UserServiceImpl implements UserService {
     // @Autowired
 //   private PasswordEncoder passwordEncoder;
 
-    private final ReactiveCircuitBreaker readingListCircuitBreaker;
+    private final ReactiveCircuitBreaker reactiveCircuitBreaker;
     private final WebClient webClient;
 
     public UserServiceImpl(UserRepository userRepository, ReactiveCircuitBreakerFactory circuitBreakerFactory) {
         this.userRepository = userRepository;
-        this.readingListCircuitBreaker = circuitBreakerFactory.create("recommended");
+        this.reactiveCircuitBreaker = circuitBreakerFactory.create("recommended");
         this.webClient = WebClient.builder().baseUrl("http://localhost:8083").build();
     }
 
@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Mono<String> readingList() {
-        return readingListCircuitBreaker.run(webClient.get().uri("/recommended").retrieve().bodyToMono(String.class), throwable -> {
+        return reactiveCircuitBreaker.run(webClient.get().uri("/recommended").retrieve().bodyToMono(String.class), throwable -> {
             System.out.println("Error making request to book service" + throwable);
             return Mono.just("Cloud Native Java (O'Reilly)");
         });
