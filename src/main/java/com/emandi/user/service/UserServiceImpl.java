@@ -11,7 +11,11 @@ import com.emandi.user.model.User;
 import com.emandi.user.repository.UserRepository;
 import com.emandi.user.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -20,7 +24,8 @@ import java.util.List;
 import java.util.Set;
 
 
-@Service@Transactional
+@Service
+@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
@@ -30,18 +35,27 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private EventServiceLog eventServiceLog;
-   // @Autowired
+    // @Autowired
 //   private PasswordEncoder passwordEncoder;
+
+    private final ReactiveCircuitBreaker readingListCircuitBreaker;
+    private final WebClient webClient;
+
+    public UserServiceImpl(UserRepository userRepository, ReactiveCircuitBreakerFactory circuitBreakerFactory) {
+        this.userRepository = userRepository;
+        this.readingListCircuitBreaker = circuitBreakerFactory.create("recommended");
+        this.webClient = WebClient.builder().baseUrl("http://localhost:8083").build();
+    }
 
     @Override
     public User registerUser(UserRequest userRequest) {
-        User user=new User(userRequest);
+        User user = new User(userRequest);
         Set<Role> roles1 = new HashSet<>();
         roles1.add(new Role("user"));
         user.setRoles(roles1);
         user.setPassword("nagaraju");
         User user1 = userRepository.save(user);
-       // kafkaProducerConfig.kafkaTemplate().send("createUser",user1.toString());
+        // kafkaProducerConfig.kafkaTemplate().send("createUser",user1.toString());
         eventServiceLog.addEvent(user1, "ADD_USER");
         return user1;
     }
@@ -56,7 +70,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Integer id, UserRequest userRequest) {
-        User user=new User(userRequest);
+        User user = new User(userRequest);
         user.setId(id);
         User updatedUser = userRepository.save(user);
         eventServiceLog.addEvent(updatedUser, "UPDATE_USER");
@@ -75,8 +89,8 @@ public class UserServiceImpl implements UserService {
                 CartResponse cartResponse = new CartResponse(cart);
                 cartResponseList.add(cartResponse);
             });
-         //   userResponse.setCartResponseList(cartResponseList);
-         //   eventServiceLog.addEvent(user, "GET_USER_BY_ID");
+            //   userResponse.setCartResponseList(cartResponseList);
+            //   eventServiceLog.addEvent(user, "GET_USER_BY_ID");
         }
 
         return userResponse;
@@ -93,8 +107,8 @@ public class UserServiceImpl implements UserService {
                 CartResponse cartResponse1 = new CartResponse(cart);
                 cartResponse.add(cartResponse1);
             });
-       //     userResponse.setCartResponseList(cartResponse);
-         //   userResponse.setCartResponseList(cartResponse);
+            //     userResponse.setCartResponseList(cartResponse);
+            //   userResponse.setCartResponseList(cartResponse);
             userResponses.add(userResponse);
         });
         // eventServiceLog.addEvent(userlist, "GET_ALL_USER_BY_ID");
@@ -104,14 +118,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login(LoginRequest loginRequest) {
         User user = userRepository.findByUserNameAndPassword(loginRequest.getUserName(), loginRequest.getPassword());
-        if(user!=null){
-            eventServiceLog.addEvent(loginRequest,"USER_LOGGED_IN");
+        if (user != null) {
+            eventServiceLog.addEvent(loginRequest, "USER_LOGGED_IN");
             return "User LoggedIn successfully";
-        }else{
+        } else {
             return "User details not found";
         }
 
     }
 
+    @Override
+    public Mono<String> readingList() {
+        return readingListCircuitBreaker.run(webClient.get().uri("/recommended").retrieve().bodyToMono(String.class), throwable -> {
+            System.out.println("Error making request to book service" + throwable);
+            return Mono.just("Cloud Native Java (O'Reilly)");
+        });
+    }
 
 }

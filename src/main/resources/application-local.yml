@@ -53,7 +53,7 @@ spring:
     topics:
        input: createUser
   config:
-    import: configserver:http://localhost:8888
+    import: optional:configserver:http://localhost:8888
   main:
     web-application-type: reactive
       #The above properties represent that only 2 requests are allowed in 5 seconds duration. Also,

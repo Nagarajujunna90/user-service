@@ -5,10 +5,12 @@ import com.emandi.user.dto.LoginRequest;
 import com.emandi.user.dto.UserRequest;
 import com.emandi.user.dto.UserResponse;
 import com.emandi.user.model.User;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 public interface UserService {
+
     User registerUser(UserRequest userRequest);
 
     String deleteUser(Integer id);
@@ -20,4 +22,6 @@ public interface UserService {
     List<UserResponse> findAllUsers();
 
     String login(LoginRequest loginRequest);
+
+    Mono<String> readingList();
 }
