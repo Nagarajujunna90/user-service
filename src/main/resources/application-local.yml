@@ -59,79 +59,15 @@ spring:
       #The above properties represent that only 2 requests are allowed in 5 seconds duration. Also,
       #there is no timeout duration which means after completion of 5 seconds, the user can send request again.
 
-  cloud:
-    circuitbreaker:
-      bulkhead:
-        resilience4j:
-          enabled: false
-resilience4j.circuitbreaker:
-  instances:
-    backendA:
-      registerHealthIndicator: true
-      slidingWindowSize: 100
-    backendB:
-      registerHealthIndicator: true
-      slidingWindowSize: 10
-      permittedNumberOfCallsInHalfOpenState: 3
-      slidingWindowType: TIME_BASED
-      #recordFailurePredicate: io.github.robwin.exception.RecordFailurePredicate
-
-resilience4j.timelimiter:
-  instances:
-    backendA:
-      timeoutDuration: 2s
-      cancelRunningFuture: true
-    backendB:
-      timeoutDuration: 1s
-      cancelRunningFuture: false
-
-
-resilience4j.bulkhead:
-    instances:
-      getMessageBH:
-        max-concurrent-calls: 2
-        max-wait-duration: 0
-      #bulkheadAspectOrder : 1
-
-#resilience4j.circuitbreaker:
-#    instances:
-#      GetInvoiceCB:
-#        automatic-transition-from-open-to-half-open-enabled: true
-#        failure-rate-threshold: 80
-#        minimum-number-of-calls: 5
-#        permitted-number-of-calls-in-half-open-state: 4
-#        sliding-window-size: 10
-#        sliding-window-type: COUNT_BASED
-#        wait-duration-in-open-state: 10s
-#      #circuitBreakerAspectOrder: 4
-resilience4j.ratelimiter:
-    instances:
-      getMessageRateLimit:
-        limit-for-period: 2
-        limit-refresh-period: 10s
-        timeout-duration: 0
-      #rateLimiterAspectOrder: 3
-resilience4j.retry:
-    instances:
-      getInvoiceRetry:
-        enable-exponential-backoff: true
-        max-attempts: 5
-        retry-exceptions: org.springframework.web.client.ResourceAccessException
-        wait-duration: 2s
-      #retryAspectOrder: 5
-#resilience4j.timelimiter:
-#    instances:
-#      getMessageTL:
-#        cancel-running-future: false
-#        timeout-duration: 1s
-#      #timeLimiterAspectOrder : 2
-
-
+  jackson:
+    serialization:
+      indent-output: true
 management:
   endpoints:
     web:
       exposure:
-        include: refresh
+        include: "*"
+  health:
   endpoint:
     health:
       show-details: always

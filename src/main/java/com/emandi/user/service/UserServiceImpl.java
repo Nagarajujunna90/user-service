@@ -11,8 +11,6 @@ import com.emandi.user.model.User;
 import com.emandi.user.repository.UserRepository;
 import com.emandi.user.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreaker;
-import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -35,20 +33,21 @@ public class UserServiceImpl implements UserService {
     private RoleRepository roleRepository;
     @Autowired
     private EventServiceLog eventServiceLog;
-    // @Autowired
-//   private PasswordEncoder passwordEncoder;
 
-    private final ReactiveCircuitBreaker reactiveCircuitBreaker;
-    private final WebClient webClient;
+    private  WebClient webClient=WebClient.create("http://localhost:8083");
 
-    public UserServiceImpl(UserRepository userRepository, ReactiveCircuitBreakerFactory circuitBreakerFactory) {
-        this.userRepository = userRepository;
-        this.reactiveCircuitBreaker = circuitBreakerFactory.create("recommended");
-        this.webClient = WebClient.builder().baseUrl("http://localhost:8083").build();
-    }
+
+
+
+    //    public UserServiceImpl(UserRepository userRepository, ReactiveResilience4JCircuitBreakerFactory circuitBreakerFactory) {
+//        this.userRepository = userRepository;
+//        this.reactiveCircuitBreaker = circuitBreakerFactory.create("recommended");
+//
+//        this.webClient = WebClient.builder().baseUrl("http://localhost:8083").build();
+//    }
 
     @Override
-    public User registerUser(UserRequest userRequest) {
+    public String registerUser(UserRequest userRequest) {
         User user = new User(userRequest);
         Set<Role> roles1 = new HashSet<>();
         roles1.add(new Role("user"));
@@ -57,7 +56,8 @@ public class UserServiceImpl implements UserService {
         User user1 = userRepository.save(user);
         // kafkaProducerConfig.kafkaTemplate().send("createUser",user1.toString());
         eventServiceLog.addEvent(user1, "ADD_USER");
-        return user1;
+        return "User created successfully";
+
     }
 
     @Override
@@ -127,12 +127,11 @@ public class UserServiceImpl implements UserService {
 
     }
 
+
     @Override
     public Mono<String> readingList() {
-        return reactiveCircuitBreaker.run(webClient.get().uri("/recommended").retrieve().bodyToMono(String.class), throwable -> {
-            System.out.println("Error making request to book service" + throwable);
-            return Mono.just("Cloud Native Java (O'Reilly)");
-        });
+       return webClient.get().uri("/recommended").retrieve().bodyToMono(String.class);
+//        stringMono.subscribe(System.out::println);
+//        return stringMono.block();
     }
-
 }

@@ -8,10 +8,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,11 @@ public class UserServiceApplication {
 
     }
 
+    @Bean
+    public WebClient webClient() {
+        return WebClient.builder().build();
+    }
+
     //	@RequestMapping("/to-read")
 //	public Mono<String> toReadWithOutCircuteBreaker() {
 //		return WebClient.builder().build()
@@ -37,14 +43,19 @@ public class UserServiceApplication {
 //				.bodyToMono(String.class);
 //	}
 
-    @RequestMapping("/to-read")
-    public Mono<String> toReadWithCircuiteBreaker() {
-        return userService.readingList();
-    }
+//    @RequestMapping("/to-read")
+//    public Mono<String> toReadWithCircuiteBreaker() {
+//        return userService.readingList();
+//    }
 
     @GetMapping("/")
     public String hello() {
         return "test";
+    }
+
+    @Bean
+    RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 
 /*    @Bean
