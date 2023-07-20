@@ -5,17 +5,15 @@ import com.emandi.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-@CrossOrigin("http://localhost:4200")
+import org.springframework.web.bind.annotation.*;
+
 @RestController
+@RequestMapping("/emandi/v1/")
 public class LoginController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         return new ResponseEntity<>(userService.login(loginRequest), HttpStatus.CREATED);
     }
