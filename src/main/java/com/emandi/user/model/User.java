@@ -32,9 +32,7 @@ public class User {
                joinColumns = @JoinColumn(name = "user_id"),
                inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER, orphanRemoval = true)
-    private List<Cart> carts = new ArrayList<>();
+
 
     public User(UserRequest userRequest) {
         this.userName = userRequest.getUserName();

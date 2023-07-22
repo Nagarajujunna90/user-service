@@ -30,7 +30,11 @@ public class UserServiceApplication {
         SpringApplication.run(UserServiceApplication.class, args);
 
     }
-
+//    @Bean
+//    public EventServiceLog eventServiceLog(){
+//        return new EventServiceLogImpl();
+//    }
+//
     @Bean
     public WebClient webClient() {
         return WebClient.builder().build();

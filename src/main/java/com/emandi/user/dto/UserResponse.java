@@ -1,10 +1,7 @@
 package com.emandi.user.dto;
 
-import com.emandi.user.model.Cart;
 import com.emandi.user.model.User;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class UserResponse {

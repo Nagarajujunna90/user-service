@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/emandi/v1/")
+@RequestMapping("/user/v1/")
 public class LoginController {
     @Autowired
     private UserService userService;
