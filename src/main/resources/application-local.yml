@@ -1,6 +1,3 @@
-server:
-  port: 8082
-
 #eureka:
 #  client:
 #    register-with-eureka: true
@@ -14,8 +11,6 @@ server:
 #    org.apache.kafka: DEBUG
 
 spring:
-  application:
-    name: user-service
   datasource:
     url: jdbc:mysql://localhost:3306/e-user?useSSL=false&allowPublicKeyRetrieval=true
     password: root
@@ -52,8 +47,8 @@ spring:
       enable-auto-commit: false
     topics:
        input: createUser
-  config:
-    import: optional:configserver:http://localhost:8888
+  #config:
+    #import: optional:configserver:http://localhost:8888
   main:
     web-application-type: reactive
       #The above properties represent that only 2 requests are allowed in 5 seconds duration. Also,

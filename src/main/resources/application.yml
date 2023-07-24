@@ -1,24 +1,10 @@
 server:
-  port: 8082
+  port: 8085
 
-
-#eureka:
-#  client:
-#    register-with-eureka: true
-#    fetch-registry: true
-#  instance:
-#    hostname: localhost
-#logging:
-#  level:
-#    root: WARN
-#    org.springframework: INFO
-#    org.apache.kafka: DEBUG
-#springdoc:
-#  api-docs:
-#    path: localhost
 spring:
   profiles:
      active: local
-  main:
-    web-application-type: reactive
-
+  cloud:
+    config:
+      import-check:
+        enabled: false

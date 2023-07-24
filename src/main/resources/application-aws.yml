@@ -1,5 +1,3 @@
-server:
-  port: 8082
 #eureka:
 #  client:
 #    register-with-eureka: true
@@ -15,10 +13,8 @@ springdoc:
   api-docs:
     path: localhost
 spring:
-  application:
-    name: customer-service
   datasource:
-    url: jdbc:mysql://localhost:3306/e-user?useSSL=true
+    url: jdbc:mysql://host.docker.internal:3306/e-user?useSSL=false
     password: root
     username: root
   jpa:
